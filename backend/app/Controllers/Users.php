@@ -21,4 +21,9 @@ class Users extends BaseController
         // return the landing view
         return view('user/signup');
     }
+    public function moodboard(): string
+    {
+        // return the landing view
+        return view('user/moodboard');
+    }
 }
