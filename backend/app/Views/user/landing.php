@@ -2,11 +2,11 @@
 <?= view('components/header') ?>
 
 <!-- Hero Section -->
-<section class="bg-gradient-to-r from-[#B91C1C] to-[#EF4444] py-20 text-white">
-    <div class="flex md:flex-row flex-col justify-center items-center gap-10 mx-auto px-6 max-w-6xl md:text-left text-center">
+<section class="relative bg-gradient-to-r from-[#B91C1C] to-[#EF4444] py-20 text-white">
+    <div class="relative flex md:flex-row flex-col justify-center items-center gap-10 mx-auto px-6 max-w-6xl md:text-left text-center">
 
         <!-- Text Side -->
-        <div class="md:w-1/2">
+        <div class="z-10 md:w-1/2">
             <h2 class="mb-4 font-bold text-5xl heading-font">
                 Welcome to <span class="text-[#FFB347]">PizzaHot</span>
             </h2>
@@ -18,13 +18,22 @@
             </a>
         </div>
 
-        <!-- Image Side -->
-        <div class="flex justify-center md:w-1/2">
-            <img src="/assets/img/NewPizza.jpg" alt="Hot Pizza" class="shadow-lg rounded-2xl w-80 md:w-[500px] hover:scale-105 transition-transform">
+        <!-- Image Side with Decorative Circles -->
+        <div class="relative flex justify-center md:w-1/2">
+            <!-- Brown circle behind pizza -->
+            <div class="-top-10 -left-10 absolute bg-[#A0522D] opacity-40 rounded-full w-32 h-32"></div>
+            <!-- Orange circle -->
+            <div class="top-16 -right-12 absolute bg-[#FF8C00] opacity-30 rounded-full w-24 h-24"></div>
+            <!-- Dirty white circle -->
+            <div class="bottom-0 left-20 absolute bg-[#F5F5DC] opacity-25 rounded-full w-20 h-20"></div>
+
+            <!-- Pizza Image -->
+            <img src="/assets/img/NewPizza.jpg" alt="Hot Pizza" class="z-10 relative shadow-lg rounded-2xl w-80 md:w-[500px] hover:scale-105 transition-transform">
         </div>
 
     </div>
 </section>
+
 
 <!-- Features / Cards Section -->
 <section class="mx-auto px-6 py-16 max-w-7xl">
