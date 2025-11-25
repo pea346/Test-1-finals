@@ -4,17 +4,17 @@
 <br/>
 
 <div align="center">
-  <a href="https://github.com/zyx-0314/">
-    <img src="./assets/img/nyebe_white.png" alt="Nyebe" width="130" height="100">
+  <a href="https://github.com/HelloMe1153/CI4-PizzaHott.git">
+    <img src="/assets/img/logo.png" alt="Pizza Logo" width="130" height="100">
   </a>
 <!-- * Title Section -->
-  <h3 align="center">AD - CI4 Template</h3>
+  <h3 align="center">AD - CI4 PizzaHott</h3>
 </div>
 
 <!-- * Description Section -->
 <div align="center">
-This repository is a beginner-friendly CodeIgniter 4 template.  
-It helps teams quickly bootstrap backend + frontend projects, with simple sample modules that show how to extend the system.
+The hottest pizzas in town, baked fresh and delivered fast.
+
 </div>
 
 <br/>
@@ -55,22 +55,23 @@ It helps teams quickly bootstrap backend + frontend projects, with simple sample
 
 ## Overview
 
-This template provides a **minimal CodeIgniter 4 project layout** with conventions for file organization, commit practices, and simple modules.
+PizzaHot is a modern, responsive web application for ordering hot, fresh pizzas online. The site allows users to browse pizzas, place orders, and enjoy fast delivery, all through an easy-to-use interface.
 
-It is designed to be **easy to start with** and a **reference for adding new features**.
-
-* **Purpose**: a clean starting point for CI4 apps.
-* **Audience**: developers who want a predictable structure and quick onboarding.
+* **Purpose**: To provide a fun and seamless online pizza ordering experience with a focus on fast delivery, fresh ingredients, and secure checkout.
+* **Audience**: Customers looking to order pizzas online and developers who want to explore a CodeIgniter 4-based food ordering app.
 
 ### Key Components
 
 These are **sample modules** included (or suggested) for learning how to add features:
 
-| Component                 | Purpose                                                             | Notes                                                   |
-| ------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------- |
-| **Auth (Sample)**         | Basic login/logout and role check (admin/user).                     | Uses CI4 sessions + MySQL `users` table.                |
-| **CRUD Module**           | Example entity (`Posts` or `Tasks`) with create/read/update/delete. | Demonstrates Controller → Service → Repository pattern. |
-| **Scheduler (Sample)**    | Simple to-do list with due dates.                                   | Shows how to extend with new tables and services.       |
+| Component                 | Purpose                   |
+| ------------------------- | --------------------------|
+| **buttons**               | Basic login/logout and role check (admin/user)|
+| **cards**                 | Container that groups related information together in a compact block|
+| **CTA**                   | Simple call-to-action block| 
+| **Header**                | Navigation links| 
+| **Footer**                | Information and navigation| 
+| **form-button**           | Button used inside a form to submit actions| 
 
  <!-- ! Start simple. Use these modules as **learning samples**; extend or replace them based on your project’s needs. -->
 
@@ -88,12 +89,7 @@ These are **sample modules** included (or suggested) for learning how to add fea
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge\&logo=tailwindcss\&logoColor=white)
 ![CodeIgniter](https://img.shields.io/badge/CodeIgniter-EF4223?style=for-the-badge\&logo=codeigniter\&logoColor=white)
 
-#### Databases
 
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge\&logo=mysql\&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge\&logo=postgresql\&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge\&logo=mongodb\&logoColor=white)
-![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge\&logo=firebase\&logoColor=black)
 
 <!-- ! Keep only the used technology -->
 
