@@ -16,8 +16,6 @@ class OrdersModel extends Model
         'user_id',
         'item_id',
         'quantity',
-        'size',
-        'toppings',
         'total_price',
         'first_name',
         'last_name',

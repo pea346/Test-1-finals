@@ -59,7 +59,8 @@ class Auth extends Controller
             return redirect()->to('/admin/dashboard');
         }
 
-        return redirect()->to('/');
+        // For clients
+        return redirect()->to('/client/home');
     }
 
     public function logout()

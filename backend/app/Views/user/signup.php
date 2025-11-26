@@ -1,3 +1,7 @@
+<?php
+$errors = session('errors') ?? [];
+$old = session('old') ?? [];
+?>
 <!DOCTYPE html>
 <html lang="en" class="bg-gray-100 dark:bg-gray-900">
 <?= view('components/head', ['title' => 'Signup Page']) ?>
