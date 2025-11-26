@@ -9,6 +9,18 @@ use App\Models\OrdersModel;
 
 class Dashboard extends BaseController
 {
+
+    protected $ordersModel;
+    protected $itemsModel;
+    protected $usersModel;
+
+    // Constructor to initialize models
+    public function __construct()
+    {
+        $this->ordersModel = new OrdersModel();
+        $this->itemsModel  = new ItemsModel();
+        $this->usersModel  = new UsersModel();
+    }
     private function checkManager()
     {
         $session = session();
@@ -76,8 +88,6 @@ class Dashboard extends BaseController
         ]);
     }
 
-
-
     public function orderRequests()
     {
         $user = $this->checkManager();
@@ -85,7 +95,7 @@ class Dashboard extends BaseController
 
         $db = \Config\Database::connect();
         $builder = $db->table('orders');
-        $builder->select('orders.*, items.title as item_name, users.first_name, users.last_name');
+        $builder->select('orders.id, orders.order_number, orders.quantity, orders.status, orders.total_price, orders.created_at, items.title as item_name, users.first_name, users.last_name');
         $builder->join('items', 'items.id = orders.item_id', 'left');
         $builder->join('users', 'users.id = orders.user_id', 'left');
         $orders = $builder->get()->getResultArray();
@@ -212,7 +222,7 @@ class Dashboard extends BaseController
 
         $itemsModel->insert($data);
 
-        return redirect()->to('/admin/menu-items')->with('success', 'Menu item added successfully.');
+        return redirect()->to('/admin/menu')->with('success', 'Menu item added successfully.');
     }
 
     public function editItem($id)
@@ -249,7 +259,7 @@ class Dashboard extends BaseController
 
         $itemsModel->update($id, $data);
 
-        return redirect()->to('/admin/menu-items')->with('success', 'Menu item added successfully.');
+        return redirect()->to('/admin/menu')->with('success', 'Menu item added successfully.');
     }
 
     public function deleteItem($id)
@@ -266,13 +276,12 @@ class Dashboard extends BaseController
 
         $itemsModel->delete($id);
 
-        return redirect()->to('/admin/menu-items')->with('success', 'Menu item added successfully.');
+        return redirect()->to('/admin/menu')->with('success', 'Menu item added successfully.');
     }
 
     // ----------------- ORDERS -----------------
     // You can expand CRUD for orders if needed (approve/reject, delete, etc.)
 
-    // Create Order (optional)
     public function createOrder()
     {
         $user = $this->checkManager();
@@ -373,19 +382,21 @@ class Dashboard extends BaseController
     }
 
     // Delete Order
-    public function deleteOrder($id)
+    public function deleteOrder($orderId)
     {
-        $user = $this->checkManager();
-        if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
-
-        $ordersModel = new OrdersModel();
-        $order = $ordersModel->find($id);
+        $order = $this->ordersModel->find($orderId);
 
         if (!$order) {
-            return redirect()->to('/admin/orders')->with('error', 'Order not found.');
+            return redirect()->back()->with('error', 'Order not found.');
         }
 
-        $ordersModel->delete($id); // works if model uses soft deletes
-        return redirect()->to('/admin/orders')->with('success', 'Order deleted successfully.');
+        // Only allow deleting if the order is completed
+        if ($order['status'] !== 'Completed') {
+            return redirect()->back()->with('error', 'Only completed orders can be deleted.');
+        }
+
+        $this->ordersModel->delete($orderId);
+
+        return redirect()->back()->with('success', 'Order deleted successfully.');
     }
 }

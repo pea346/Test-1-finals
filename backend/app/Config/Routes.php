@@ -20,55 +20,73 @@ $routes->post('logout', 'Auth::logout');
 $routes->get('logout', 'Auth::logout');
 
 // ----------------- Admin Dashboard -----------------
-$routes->get('/admin/dashboard', 'Admin\Dashboard::index');
-$routes->get('/admin/menu', 'Admin\Dashboard::menu'); //renamed
-$routes->get('/admin/accounts', 'Admin\Dashboard::accounts');
-$routes->get('/admin/orders', 'Admin\Dashboard::orderRequests'); // renamed
+$routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
 
-// ----------------- Admin Accounts CRUD -----------------
-$routes->get('/admin/accounts/create', 'Admin\Dashboard::createUser');
-$routes->post('/admin/accounts/store', 'Admin\Dashboard::storeUser');
-$routes->get('/admin/accounts/edit/(:num)', 'Admin\Dashboard::editUser/$1');
-$routes->post('/admin/accounts/update/(:num)', 'Admin\Dashboard::updateUser/$1');
-$routes->get('/admin/accounts/delete/(:num)', 'Admin\Dashboard::deleteUser/$1');
-$routes->post('/admin/accounts/delete/(:num)', 'Admin\Dashboard::deleteUser/$1');
+    // Dashboard
+    $routes->get('dashboard', 'Dashboard::index');
 
+    // Accounts CRUD
+    $routes->get('accounts', 'Dashboard::accounts');
+    $routes->get('accounts/create', 'Dashboard::createUser');
+    $routes->post('accounts/store', 'Dashboard::storeUser');
+    $routes->get('accounts/edit/(:num)', 'Dashboard::editUser/$1');
+    $routes->post('accounts/update/(:num)', 'Dashboard::updateUser/$1');
+    $routes->get('accounts/delete/(:num)', 'Dashboard::deleteUser/$1');
+    $routes->post('accounts/delete/(:num)', 'Dashboard::deleteUser/$1');
 
+    // Menu CRUD
+    $routes->get('menu', 'Dashboard::menu'); // list all items
+    $routes->get('menu/create', 'Dashboard::createItem');
+    $routes->get('menu/store', 'Dashboard::storeItem');
+    $routes->post('menu/store', 'Dashboard::storeItem');
+    $routes->get('menu/edit/(:num)', 'Dashboard::editItem/$1');
+    $routes->post('menu/update/(:num)', 'Dashboard::updateItem/$1');
+    $routes->get('menu/delete/(:num)', 'Dashboard::deleteItem/$1');
+    $routes->post('menu/delete/(:num)', 'Dashboard::deleteItem/$1');
 
-// ----------------- Admin Menu Items CRUD -----------------
-$routes->get('/admin/menu', 'Admin\Dashboard::menu');
-$routes->get('/admin/menu-items', 'Admin\Dashboard::menuItems');
-$routes->get('/admin/menu/create', 'Admin\Dashboard::createItem');
-$routes->post('/admin/menu/store', 'Admin\Dashboard::storeItem');
-$routes->post('/admin/menu-items/store', 'Admin\Dashboard::storeItem');
-$routes->get('/admin/menu/edit/(:num)', 'Admin\Dashboard::editItem/$1');
-$routes->post('/admin/menu-items/update/(:num)', 'Admin\Dashboard::updateItem/$1');
-$routes->get('/admin/menu/delete/(:num)', 'Admin\Dashboard::deleteItem/$1');
-$routes->post('/admin/menu/delete/(:num)', 'Admin\Dashboard::deleteItem/$1');
+    // Orders CRUD
+    $routes->get('orders', 'Dashboard::orderRequests');
+    $routes->get('orders/create', 'Dashboard::createOrder');
+    $routes->post('orders/store', 'Dashboard::storeOrder');
+    $routes->get('orders/edit/(:num)', 'Dashboard::editOrder/$1');
+    $routes->post('orders/update/(:num)', 'Dashboard::updateOrder/$1');
+    $routes->get('orders/delete/(:num)', 'Dashboard::deleteOrder/$1');
+    $routes->post('orders/delete/(:num)', 'Dashboard::deleteOrder/$1');
+    $routes->post('orders/complete/(:num)', 'Dashboard::completeOrder/$1');
+});
 
+// ----------------- Client Routes -----------------
+$routes->group('client', ['namespace' => 'App\Controllers\Client'], function ($routes) {
 
+    // Dashboard
+    $routes->get('home', 'ClientController::home');
+    $routes->get('menu', 'ClientController::menu');
+    $routes->post('order', 'ClientController::checkout');
+    $routes->get('orders', 'ClientController::orders');
 
+    // Profile
+    $routes->get('profile', 'ClientController::profile');
+    $routes->post('profile/delete', 'ClientController::deleteAccount');
 
+    // Orders management
+    $routes->post('orders/add', 'ClientController::addToOrders');
+    $routes->post('orders/confirm', 'ClientController::confirmOrders');
+    $routes->post('order/checkout', 'ClientController::checkout');
+    $routes->post('order/complete', 'ClientController::completeOrder');
+    $routes->post('order/cancel/(:num)', 'ClientController::cancelOrder/$1');
+    $routes->get('order/cancel/(:num)', 'ClientController::cancelOrder/$1');
 
-// ----------------- Admin Order Requests CRUD -----------------
-$routes->get('/admin/orders', 'Admin\Dashboard::orderRequests'); // list all
-$routes->get('/admin/orders/create', 'Admin\Dashboard::createOrder'); // create form
-$routes->post('/admin/orders/store', 'Admin\Dashboard::storeOrder'); // store new order
-$routes->get('/admin/orders/edit/(:num)', 'Admin\Dashboard::editOrder/$1'); // edit form
-$routes->post('/admin/orders/update/(:num)', 'Admin\Dashboard::updateOrder/$1'); // update order
-$routes->get('/admin/orders/delete/(:num)', 'Admin\Dashboard::deleteOrder/$1'); // delete order
-$routes->post('/admin/orders/delete/(:num)', 'Admin\Dashboard::deleteOrder/$1');
-$routes->post('admin/menu-items/store', 'Admin\MenuItemsController::store');
-
-
-
-
-
+    // Additional routes
+    $routes->post('add-to-orders', 'ClientController::addToOrders');
+    $routes->post('complete-order', 'ClientController::completeOrder');
+});
 
 // ----------------- Testing Routes (optional) -----------------
-$routes->get('/test/show', 'CRUDTesting::showUsersPage');
-$routes->get('/test/create', 'CRUDTesting::create');
-$routes->post('/test/store', 'CRUDTesting::store');
-$routes->get('/test/edit/(:num)', 'CRUDTesting::edit/$1');
-$routes->post('/test/update/(:num)', 'CRUDTesting::update/$1');
-$routes->get('/test/delete/(:num)', 'CRUDTesting::delete/$1');
+$routes->group('test', function ($routes) {
+    $routes->get('show', 'CRUDTesting::showUsersPage');
+    $routes->get('create', 'CRUDTesting::create');
+    $routes->post('store', 'CRUDTesting::store');
+    $routes->get('edit/(:num)', 'CRUDTesting::edit/$1');
+    $routes->post('update/(:num)', 'CRUDTesting::update/$1');
+    $routes->get('delete/(:num)', 'CRUDTesting::delete/$1');
+});

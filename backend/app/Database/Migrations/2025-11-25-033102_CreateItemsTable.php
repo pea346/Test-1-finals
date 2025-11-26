@@ -33,10 +33,6 @@ class CreateItemsTable extends Migration
                 'constraint' => '20',
                 'null'       => true,
             ],
-            'toppings' => [
-                'type'       => 'TEXT',
-                'null'       => true,
-            ],
             'image' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '255',
