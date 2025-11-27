@@ -64,6 +64,7 @@ $routes->group('client', ['namespace' => 'App\Controllers\Client'], function ($r
     $routes->post('order', 'ClientController::checkout');
     $routes->get('orders', 'ClientController::orders');
 
+
     // Profile
     $routes->get('profile', 'ClientController::profile');
     $routes->post('profile/delete', 'ClientController::deleteAccount');
@@ -73,8 +74,9 @@ $routes->group('client', ['namespace' => 'App\Controllers\Client'], function ($r
     $routes->post('orders/confirm', 'ClientController::confirmOrders');
     $routes->post('order/checkout', 'ClientController::checkout');
     $routes->post('order/complete', 'ClientController::completeOrder');
-    $routes->post('order/cancel/(:num)', 'ClientController::cancelOrder/$1');
-    $routes->get('order/cancel/(:num)', 'ClientController::cancelOrder/$1');
+    $routes->post('orders/cancel/(:num)', 'ClientController::cancelOrder/$1');
+
+
 
     // Additional routes
     $routes->post('add-to-orders', 'ClientController::addToOrders');

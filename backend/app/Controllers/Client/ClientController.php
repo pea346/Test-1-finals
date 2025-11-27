@@ -53,44 +53,54 @@ class ClientController extends BaseController
     // Add to Orders (Pending)
     public function addToOrders()
     {
-        $user = session()->get('user');
-        if (!$user) return redirect()->to('/login');
-
+        $userId = session()->get('user')['id'];
         $itemId = $this->request->getPost('item_id');
         $quantity = (int) $this->request->getPost('quantity');
 
         $ordersModel = new \App\Models\OrdersModel();
 
-        // Check if user already has a pending order for this item
-        $existingOrder = $ordersModel
-            ->where('user_id', $user['id'])
-            ->where('item_id', $itemId)
-            ->where('status', 'Pending')
-            ->first();
+        // Check if this item already exists in pending orders for this user
+        $existingOrder = $ordersModel->where([
+            'user_id' => $userId,
+            'item_id' => $itemId,
+            'status'  => 'Pending'
+        ])->first();
 
         if ($existingOrder) {
-            // Just increase quantity
-            $newQty = $existingOrder['quantity'] + $quantity;
+            // Update quantity
+            $newQuantity = $existingOrder['quantity'] + $quantity;
             $ordersModel->update($existingOrder['id'], [
-                'quantity' => $newQty,
-                'total_price' => $newQty * $existingOrder['total_price'] / $existingOrder['quantity'] // recalc total price
+                'quantity' => $newQuantity,
+                'total_price' => $newQuantity * $this->getItemPrice($itemId)
             ]);
         } else {
             // Insert new order
-            $itemsModel = new \App\Models\ItemsModel();
-            $item = $itemsModel->find($itemId);
-
-            $ordersModel->insert([
-                'user_id' => $user['id'],
+            // Insert first without order_number
+            $orderId = $ordersModel->insert([
+                'user_id' => $userId,
                 'item_id' => $itemId,
                 'quantity' => $quantity,
-                'total_price' => $quantity * $item['cost'],
+                'total_price' => $quantity * $this->getItemPrice($itemId),
                 'status' => 'Pending',
-                'order_number' => null   // IMPORTANT
+                'order_number' => null
             ]);
+
+            // Generate sequential order number
+            $orderNumber = 'ORD' . str_pad($orderId, 5, '0', STR_PAD_LEFT);
+            $ordersModel->update($orderId, ['order_number' => $orderNumber]);
         }
 
-        return redirect()->back()->with('success', 'Item added to your orders.');
+        return redirect()->back()->with('success', 'Order added successfully.');
+    }
+
+    /**
+     * Helper to get item price
+     */
+    private function getItemPrice($itemId)
+    {
+        $itemsModel = new \App\Models\ItemsModel();
+        $item = $itemsModel->find($itemId);
+        return $item ? $item['cost'] : 0;
     }
 
 
@@ -150,14 +160,21 @@ class ClientController extends BaseController
     // Cancel a pending order
     public function cancelOrder($orderId)
     {
-        $user = $this->checkUser();
-        if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
+        $ordersModel = new \App\Models\OrdersModel();
+        $order = $ordersModel->find($orderId);
 
-        $order = $this->ordersModel->where('id', $orderId)->where('user_id', $user['id'])->first();
-        if (!$order) return redirect()->back()->with('error', 'Order not found.');
+        if (!$order) {
+            return redirect()->back()->with('error', 'Order not found.');
+        }
 
-        $this->ordersModel->delete($orderId);
-        return redirect()->back()->with('success', 'Order canceled.');
+        // Only allow cancelling pending orders
+        if ($order['status'] !== 'Pending') {
+            return redirect()->back()->with('error', 'Only pending orders can be cancelled.');
+        }
+
+        $ordersModel->update($orderId, ['status' => 'Cancelled']);
+
+        return redirect()->back()->with('success', 'Order cancelled successfully.');
     }
 
     public function confirmOrders()
@@ -188,5 +205,19 @@ class ClientController extends BaseController
         $user = $usersModel->find($userId); // ensures account_status is included
 
         return view('client/profile', ['user' => $user]);
+    }
+
+    public function deleteAccount()
+    {
+        $usersModel = new \App\Models\UsersModel();
+        $userId = session()->get('user')['id']; // get logged-in user ID
+
+        // Soft delete: mark account as inactive
+        $usersModel->update($userId, ['account_status' => 0]);
+
+        // Destroy session so user is logged out
+        session()->destroy();
+
+        return redirect()->to('/login')->with('success', 'Your account has been deactivated.');
     }
 }

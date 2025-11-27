@@ -13,7 +13,7 @@
             <p class="mb-6 text-[#78350F] text-lg">
                 The hottest pizzas in town — baked fresh and delivered fast to your door.
             </p>
-            <a href="signup.php" class="bg-[#D22B2B] hover:bg-[#B91C1C] shadow-md px-6 py-3 rounded-lg font-bold text-white transition">
+            <a href="login/" class="bg-[#D22B2B] hover:bg-[#B91C1C] shadow-md px-6 py-3 rounded-lg font-bold text-white transition">
                 Order Now
             </a>
         </div>

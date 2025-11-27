@@ -17,7 +17,6 @@ class ItemsModel extends Model
         'cost',
         'is_available',
         'is_active',
-        'size'
     ];
 
     protected $useTimestamps = true;
@@ -31,8 +30,6 @@ class ItemsModel extends Model
         'cost'         => 'required|decimal',
         'is_available' => 'required|in_list[0,1]',
         'is_active'    => 'required|in_list[0,1]',
-        'size'         => 'permit_empty',
-        'toppings'     => 'permit_empty|max_length[255]',
         'image'        => 'permit_empty|valid_url',
         'category'     => 'permit_empty'
     ];
