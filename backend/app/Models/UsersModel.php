@@ -21,8 +21,10 @@ class UsersModel extends Model
         'password_hash',
         'type',
         'account_status',
-        'email_activated'
+        'email_activated',
+        'deleted_at' // added for manual reset/reactivation
     ];
+
 
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';

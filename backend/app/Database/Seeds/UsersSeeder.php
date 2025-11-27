@@ -23,6 +23,7 @@ class UsersSeeder extends Seeder
                 'email_activated'  => 1,
                 'created_at'       => $now,
                 'updated_at'       => $now,
+                'deleted_at'       => null,
             ],
 
             // ✅ CLIENT ACCOUNTS
@@ -36,6 +37,7 @@ class UsersSeeder extends Seeder
                 'email_activated'  => 1,
                 'created_at'       => $now,
                 'updated_at'       => $now,
+                'deleted_at'       => null,
             ],
             [
                 'first_name'       => 'Jane',
@@ -47,8 +49,9 @@ class UsersSeeder extends Seeder
                 'email_activated'  => 1,
                 'created_at'       => $now,
                 'updated_at'       => $now,
+                'deleted_at'       => null,
             ],
-    
+
             [
                 'first_name'       => 'Bob',
                 'last_name'        => 'Brown',
@@ -59,6 +62,7 @@ class UsersSeeder extends Seeder
                 'email_activated'  => 1,
                 'created_at'       => $now,
                 'updated_at'       => $now,
+                'deleted_at'       => null,
             ],
             [
                 'first_name'       => 'Eve',
@@ -70,6 +74,7 @@ class UsersSeeder extends Seeder
                 'email_activated'  => 1,
                 'created_at'       => $now,
                 'updated_at'       => $now,
+                'deleted_at'       => null,
             ]
         ];
 

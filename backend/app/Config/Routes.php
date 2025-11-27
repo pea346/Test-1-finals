@@ -23,37 +23,37 @@ $routes->get('logout', 'Auth::logout');
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
 
     // Dashboard
-    $routes->get('dashboard', 'Dashboard::index');
+    $routes->get('dashboard', 'AdminController::index');
 
     // Accounts CRUD
-    $routes->get('accounts', 'Dashboard::accounts');
-    $routes->get('accounts/create', 'Dashboard::createUser');
-    $routes->post('accounts/store', 'Dashboard::storeUser');
-    $routes->get('accounts/edit/(:num)', 'Dashboard::editUser/$1');
-    $routes->post('accounts/update/(:num)', 'Dashboard::updateUser/$1');
-    $routes->get('accounts/delete/(:num)', 'Dashboard::deleteUser/$1');
-    $routes->post('accounts/delete/(:num)', 'Dashboard::deleteUser/$1');
+    $routes->get('accounts', 'AdminController::accounts');
+    $routes->get('accounts/create', 'AdminController::createUser');
+    $routes->post('accounts/store', 'AdminController::storeUser');
+    $routes->get('accounts/edit/(:num)', 'AdminController::editUser/$1');
+    $routes->post('accounts/update/(:num)', 'AdminController::updateUser/$1');
+    $routes->get('accounts/delete/(:num)', 'AdminController::deleteUser/$1');
+    $routes->post('accounts/delete/(:num)', 'AdminController::deleteUser/$1');
 
     // Menu CRUD
-    $routes->get('menu', 'Dashboard::menu'); // list all items
-    $routes->get('menu/create', 'Dashboard::createItem');
-    $routes->get('menu/store', 'Dashboard::storeItem');
-    $routes->post('menu/store', 'Dashboard::storeItem');
-    $routes->get('menu/edit/(:num)', 'Dashboard::editItem/$1');
-    $routes->post('menu/update/(:num)', 'Dashboard::updateItem/$1');
-    $routes->get('menu/delete/(:num)', 'Dashboard::deleteItem/$1');
-    $routes->post('menu/delete/(:num)', 'Dashboard::deleteItem/$1');
+    $routes->get('menu', 'AdminController::menu');
+    $routes->get('menu/create', 'AdminController::createItem');
+    $routes->post('menu/store', 'AdminController::storeItem');
+    $routes->get('menu/edit/(:num)', 'AdminController::editItem/$1');
+    $routes->post('menu/update/(:num)', 'AdminController::updateItem/$1');
+    $routes->get('menu/delete/(:num)', 'AdminController::deleteItem/$1');
+    $routes->post('menu/delete/(:num)', 'AdminController::deleteItem/$1');
 
     // Orders CRUD
-    $routes->get('orders', 'Dashboard::orderRequests');
-    $routes->get('orders/create', 'Dashboard::createOrder');
-    $routes->post('orders/store', 'Dashboard::storeOrder');
-    $routes->get('orders/edit/(:num)', 'Dashboard::editOrder/$1');
-    $routes->post('orders/update/(:num)', 'Dashboard::updateOrder/$1');
-    $routes->get('orders/delete/(:num)', 'Dashboard::deleteOrder/$1');
-    $routes->post('orders/delete/(:num)', 'Dashboard::deleteOrder/$1');
-    $routes->post('orders/complete/(:num)', 'Dashboard::completeOrder/$1');
+    $routes->get('orders', 'AdminController::orderRequests');
+    $routes->get('orders/create', 'AdminController::createOrder');
+    $routes->post('orders/store', 'AdminController::storeOrder');
+    $routes->get('orders/edit/(:num)', 'AdminController::editOrder/$1');
+    $routes->post('orders/update/(:num)', 'AdminController::updateOrder/$1');
+    $routes->get('orders/delete/(:num)', 'AdminController::deleteOrder/$1');
+    $routes->post('orders/delete/(:num)', 'AdminController::deleteOrder/$1');
+    $routes->post('orders/complete/(:num)', 'AdminController::completeOrder/$1');
 });
+
 
 // ----------------- Client Routes -----------------
 $routes->group('client', ['namespace' => 'App\Controllers\Client'], function ($routes) {
@@ -68,6 +68,8 @@ $routes->group('client', ['namespace' => 'App\Controllers\Client'], function ($r
     // Profile
     $routes->get('profile', 'ClientController::profile');
     $routes->post('profile/delete', 'ClientController::deleteAccount');
+    $routes->post('profile/update', 'ClientController::updateProfile');
+
 
     // Orders management
     $routes->post('orders/add', 'ClientController::addToOrders');

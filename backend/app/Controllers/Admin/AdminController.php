@@ -7,38 +7,32 @@ use App\Models\UsersModel;
 use App\Models\ItemsModel;
 use App\Models\OrdersModel;
 
-class Dashboard extends BaseController
+class AdminController extends BaseController
 {
-
     protected $ordersModel;
     protected $itemsModel;
     protected $usersModel;
 
-    // Constructor to initialize models
     public function __construct()
     {
         $this->ordersModel = new OrdersModel();
         $this->itemsModel  = new ItemsModel();
         $this->usersModel  = new UsersModel();
     }
+
+    // ----------------- Helper -----------------
     private function checkManager()
     {
         $session = session();
         $user = $session->get('user');
 
-        if (!$user) {
-            return redirect()->to('/login');
-        }
-
-        if (strtolower($user['type']) !== 'manager') {
-            return redirect()->to('/no-access');
-        }
+        if (!$user) return redirect()->to('/login');
+        if (strtolower($user['type']) !== 'manager') return redirect()->to('/no-access');
 
         return $user;
     }
 
-    // ----------------- DASHBOARD PAGES -----------------
-
+    // ----------------- DASHBOARD -----------------
     public function index()
     {
         $user = $this->checkManager();
@@ -47,13 +41,13 @@ class Dashboard extends BaseController
         return view('admin/dashboard', ['user' => $user]);
     }
 
+    // ----------------- MENU -----------------
     public function menu()
     {
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $itemsModel = new ItemsModel();
-        $items = $itemsModel->findAll(); // fetch all items
+        $items = $this->itemsModel->findAll();
 
         return view('admin/menu', [
             'user' => $user,
@@ -61,14 +55,13 @@ class Dashboard extends BaseController
         ]);
     }
 
-
+    // ----------------- ACCOUNTS -----------------
     public function accounts()
     {
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $usersModel = new UsersModel();
-        $users = $usersModel->findAll();
+        $users = $this->usersModel->findAll();
 
         return view('admin/accounts', [
             'user' => $user,
@@ -76,18 +69,7 @@ class Dashboard extends BaseController
         ]);
     }
 
-    public function menuItems()
-    {
-        $db = \Config\Database::connect();
-        $builder = $db->table('items'); // your table
-        $items = $builder->get()->getResultArray(); // fetch all rows
-
-        return view('admin/menu', [
-            'items' => $items,
-            'user'  => session()->get('user')
-        ]);
-    }
-
+    // ----------------- ORDERS -----------------
     public function orderRequests()
     {
         $user = $this->checkManager();
@@ -106,9 +88,7 @@ class Dashboard extends BaseController
         ]);
     }
 
-
     // ----------------- USERS CRUD -----------------
-
     public function createUser()
     {
         $user = $this->checkManager();
@@ -122,8 +102,6 @@ class Dashboard extends BaseController
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $usersModel = new UsersModel();
-
         $data = [
             'first_name' => $this->request->getPost('first_name'),
             'last_name'  => $this->request->getPost('last_name'),
@@ -133,7 +111,7 @@ class Dashboard extends BaseController
             'account_status' => $this->request->getPost('account_status') ?? 1,
         ];
 
-        $usersModel->insert($data);
+        $this->usersModel->insert($data);
 
         return redirect()->to('/admin/accounts')->with('success', 'User created successfully.');
     }
@@ -143,12 +121,8 @@ class Dashboard extends BaseController
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $usersModel = new UsersModel();
-        $userToEdit = $usersModel->find($id); // this must match an existing ID
-
-        if (!$userToEdit) {
-            return redirect()->to('/admin/accounts')->with('error', 'User not found.');
-        }
+        $userToEdit = $this->usersModel->find($id);
+        if (!$userToEdit) return redirect()->to('/admin/accounts')->with('error', 'User not found.');
 
         return view('admin/edit_user', [
             'user' => $user,
@@ -156,13 +130,10 @@ class Dashboard extends BaseController
         ]);
     }
 
-
     public function updateUser($id)
     {
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
-
-        $usersModel = new UsersModel();
 
         $data = [
             'first_name' => $this->request->getPost('first_name'),
@@ -172,7 +143,7 @@ class Dashboard extends BaseController
             'account_status' => $this->request->getPost('account_status') ? 1 : 0,
         ];
 
-        $usersModel->update($id, $data);
+        $this->usersModel->update($id, $data);
 
         return redirect()->to('/admin/accounts')->with('success', 'User updated successfully.');
     }
@@ -182,22 +153,15 @@ class Dashboard extends BaseController
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $usersModel = new UsersModel();
-        $userToDelete = $usersModel->find($id);
+        $userToDelete = $this->usersModel->find($id);
+        if (!$userToDelete) return redirect()->to('/admin/accounts')->with('error', 'User not found.');
 
-        if (!$userToDelete) {
-            return redirect()->to('/admin/accounts')->with('error', 'User not found.');
-        }
-
-        $usersModel->delete($id);
+        $this->usersModel->delete($id);
 
         return redirect()->to('/admin/accounts')->with('success', 'User deleted successfully.');
     }
 
-
-
     // ----------------- MENU ITEMS CRUD -----------------
-
     public function createItem()
     {
         $user = $this->checkManager();
@@ -211,8 +175,6 @@ class Dashboard extends BaseController
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $itemsModel = new ItemsModel();
-
         $data = [
             'title' => $this->request->getPost('title'),
             'cost' => $this->request->getPost('cost'),
@@ -220,7 +182,7 @@ class Dashboard extends BaseController
             'is_active'    => $this->request->getPost('is_active') ? 1 : 0,
         ];
 
-        $itemsModel->insert($data);
+        $this->itemsModel->insert($data);
 
         return redirect()->to('/admin/menu')->with('success', 'Menu item added successfully.');
     }
@@ -230,12 +192,8 @@ class Dashboard extends BaseController
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $itemsModel = new ItemsModel();
-        $item = $itemsModel->find($id);
-
-        if (!$item) {
-            return redirect()->to('/admin/menu')->with('error', 'Item not found.');
-        }
+        $item = $this->itemsModel->find($id);
+        if (!$item) return redirect()->to('/admin/menu')->with('error', 'Item not found.');
 
         return view('admin/edit_item', [
             'user' => $user,
@@ -248,8 +206,6 @@ class Dashboard extends BaseController
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $itemsModel = new ItemsModel();
-
         $data = [
             'title' => $this->request->getPost('title'),
             'cost' => $this->request->getPost('cost'),
@@ -257,7 +213,7 @@ class Dashboard extends BaseController
             'is_active'    => $this->request->getPost('is_active') ? 1 : 0,
         ];
 
-        $itemsModel->update($id, $data);
+        $this->itemsModel->update($id, $data);
 
         return redirect()->to('/admin/menu')->with('success', 'Menu item updated successfully.');
     }
@@ -267,98 +223,70 @@ class Dashboard extends BaseController
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $itemsModel = new ItemsModel();
-        $item = $itemsModel->find($id);
+        $item = $this->itemsModel->find($id);
+        if (!$item) return redirect()->to('/admin/menu')->with('error', 'Item not found.');
 
-        if (!$item) {
-            return redirect()->to('/admin/menu')->with('error', 'Item not found.');
-        }
+        $this->itemsModel->delete($id);
 
-        $itemsModel->delete($id);
-
-        return redirect()->to('/admin/menu')->with('success', 'Menu item added successfully.');
+        return redirect()->to('/admin/menu')->with('success', 'Menu item deleted successfully.');
     }
 
-    // ----------------- ORDERS -----------------
-    // You can expand CRUD for orders if needed (approve/reject, delete, etc.)
-
+    // ----------------- ORDERS CRUD -----------------
     public function createOrder()
     {
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $itemsModel = new ItemsModel();
-        $items = $itemsModel->findAll();
-
-        $usersModel = new UsersModel();
-        $users = $usersModel->findAll(); // <-- Add this
+        $items = $this->itemsModel->findAll();
+        $users = $this->usersModel->findAll();
 
         return view('admin/create_order', [
             'user' => $user,
             'items' => $items,
-            'users' => $users // <-- Pass to view
+            'users' => $users
         ]);
     }
-
 
     public function storeOrder()
     {
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $ordersModel = new OrdersModel();
-        $usersModel  = new UsersModel();
-        $itemsModel  = new ItemsModel();
-
-        // Get POST data
         $userId = $this->request->getPost('user_id');
         $itemId = $this->request->getPost('item_id');
         $quantity = $this->request->getPost('quantity');
         $status = $this->request->getPost('status') ?? 'Pending';
 
-        // Validate user_id exists
-        if (!$usersModel->find($userId)) {
+        if (!$this->usersModel->find($userId)) {
             return redirect()->back()->with('error', 'Selected user does not exist.');
         }
-
-        // Validate item_id exists
-        if (!$itemsModel->find($itemId)) {
+        if (!$this->itemsModel->find($itemId)) {
             return redirect()->back()->with('error', 'Selected item does not exist.');
         }
 
-        // Insert order first without order_number
-        $orderId = $ordersModel->insert([
+        $orderId = $this->ordersModel->insert([
             'user_id' => $userId,
             'item_id' => $itemId,
             'quantity' => $quantity,
             'status' => $status,
-            'order_number' => null // temporarily null
+            'order_number' => null
         ]);
 
-        // Generate sequential order number
         $orderNumber = 'ORD' . str_pad($orderId, 5, '0', STR_PAD_LEFT);
-        $ordersModel->update($orderId, ['order_number' => $orderNumber]);
+        $this->ordersModel->update($orderId, ['order_number' => $orderNumber]);
 
         return redirect()->to('/admin/orders')->with('success', 'Order created successfully.');
     }
 
-
-
-    // Edit Order
     public function editOrder($id)
     {
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
 
-        $ordersModel = new OrdersModel();
-        $order = $ordersModel->find($id);
+        $order = $this->ordersModel->find($id);
+        if (!$order) return redirect()->to('/admin/orders')->with('error', 'Order not found.');
 
-        if (!$order) {
-            return redirect()->to('/admin/orders')->with('error', 'Order not found.');
-        }
-
-        $itemsModel = new ItemsModel();
-        $items = $itemsModel->findAll();
+        $items = $this->itemsModel->findAll();
 
         return view('admin/edit_order', [
             'user' => $user,
@@ -367,13 +295,10 @@ class Dashboard extends BaseController
         ]);
     }
 
-    // Update Order
     public function updateOrder($id)
     {
         $user = $this->checkManager();
         if ($user instanceof \CodeIgniter\HTTP\RedirectResponse) return $user;
-
-        $ordersModel = new OrdersModel();
 
         $data = [
             'user_id' => $this->request->getPost('user_id'),
@@ -382,27 +307,20 @@ class Dashboard extends BaseController
             'status' => $this->request->getPost('status')
         ];
 
-        $ordersModel->update($id, $data);
+        $this->ordersModel->update($id, $data);
 
         return redirect()->to('/admin/orders')->with('success', 'Order updated successfully.');
     }
 
-    // Delete Order
     public function deleteOrder($orderId)
     {
         $order = $this->ordersModel->find($orderId);
-
-        if (!$order) {
-            return redirect()->back()->with('error', 'Order not found.');
-        }
-
-        // Only allow deleting if the order is completed
+        if (!$order) return redirect()->back()->with('error', 'Order not found.');
         if ($order['status'] !== 'Completed') {
             return redirect()->back()->with('error', 'Only completed orders can be deleted.');
         }
 
         $this->ordersModel->delete($orderId);
-
         return redirect()->back()->with('success', 'Order deleted successfully.');
     }
 }
