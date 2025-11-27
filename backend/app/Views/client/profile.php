@@ -18,11 +18,12 @@
     </div>
 
     <div class="mt-6">
-        <form action="<?= site_url('/client/profile/delete') ?>" method="post" onsubmit="return confirm('Are you sure you want to delete your account?');">
+        <form action="<?= site_url('/client/deleteAccount') ?>" method="post" onsubmit="return confirm('Are you sure you want to delete your account?');">
             <button type="submit" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded w-full text-white">
                 Delete Account
             </button>
         </form>
+
     </div>
 </div>
 

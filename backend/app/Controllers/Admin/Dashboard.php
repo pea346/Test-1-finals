@@ -216,8 +216,8 @@ class Dashboard extends BaseController
         $data = [
             'title' => $this->request->getPost('title'),
             'cost' => $this->request->getPost('cost'),
-            'is_available' => $this->request->getPost('is_available'),
-            'is_active' => $this->request->getPost('is_active'),
+            'is_available' => $this->request->getPost('is_available') ? 1 : 0,
+            'is_active'    => $this->request->getPost('is_active') ? 1 : 0,
         ];
 
         $itemsModel->insert($data);
@@ -253,13 +253,13 @@ class Dashboard extends BaseController
         $data = [
             'title' => $this->request->getPost('title'),
             'cost' => $this->request->getPost('cost'),
-            'is_available' => $this->request->getPost('is_available'),
-            'is_active' => $this->request->getPost('is_active'),
+            'is_available' => $this->request->getPost('is_available') ? 1 : 0,
+            'is_active'    => $this->request->getPost('is_active') ? 1 : 0,
         ];
 
         $itemsModel->update($id, $data);
 
-        return redirect()->to('/admin/menu')->with('success', 'Menu item added successfully.');
+        return redirect()->to('/admin/menu')->with('success', 'Menu item updated successfully.');
     }
 
     public function deleteItem($id)
@@ -326,16 +326,22 @@ class Dashboard extends BaseController
             return redirect()->back()->with('error', 'Selected item does not exist.');
         }
 
-        // Insert order
-        $ordersModel->insert([
-            'user_id'  => $userId,
-            'item_id'  => $itemId,
+        // Insert order first without order_number
+        $orderId = $ordersModel->insert([
+            'user_id' => $userId,
+            'item_id' => $itemId,
             'quantity' => $quantity,
-            'status'   => $status
+            'status' => $status,
+            'order_number' => null // temporarily null
         ]);
+
+        // Generate sequential order number
+        $orderNumber = 'ORD' . str_pad($orderId, 5, '0', STR_PAD_LEFT);
+        $ordersModel->update($orderId, ['order_number' => $orderNumber]);
 
         return redirect()->to('/admin/orders')->with('success', 'Order created successfully.');
     }
+
 
 
     // Edit Order

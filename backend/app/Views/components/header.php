@@ -28,7 +28,7 @@
                 <a href="/login" class="text-gray-200 hover:text-yellow-300 hover:underline transition-colors">Login</a>
 
                 <!-- Order Button -->
-                <a href="/menu" class="bg-yellow-400 hover:bg-yellow-500 shadow px-4 py-2 rounded-lg font-semibold text-gray-900">
+                <a href="/login" class="bg-yellow-400 hover:bg-yellow-500 shadow px-4 py-2 rounded-lg font-semibold text-gray-900">
                     Order Now
                 </a>
 
