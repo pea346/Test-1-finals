@@ -2,6 +2,17 @@
 <?= $this->section('content') ?>
 
 <h1 class="mb-6 font-bold text-gray-800 text-3xl">👤 My Profile</h1>
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="bg-green-100 mb-4 p-4 rounded text-green-800">
+        <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')): ?>
+    <div class="bg-red-100 mb-4 p-4 rounded text-red-800">
+        <?= session()->getFlashdata('error') ?>
+    </div>
+<?php endif; ?>
 
 <div class="bg-white shadow-lg mx-auto p-6 rounded-lg max-w-md text-gray-800">
 

@@ -22,6 +22,18 @@ $statusColors = [
 <h1 class="font-bold text-gray-800 dark:text-black text-4xl heading-font">📄 Order Requests</h1>
 <p class="mb-6 text-gray-600 dark:text-gray-300">View and manage customer order requests.</p>
 
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="bg-green-100 mb-4 p-4 rounded text-green-800">
+        <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')): ?>
+    <div class="bg-red-100 mb-4 p-4 rounded text-red-800">
+        <?= session()->getFlashdata('error') ?>
+    </div>
+<?php endif; ?>
+
 <?php if ($totalOrders > 0): ?>
     <div class="gap-4 grid grid-cols-1 md:grid-cols-2 mb-6">
         <div class="bg-gray-50 dark:bg-gray-700 shadow-sm p-5 rounded-xl text-center">
@@ -77,7 +89,7 @@ $statusColors = [
                                 </form>
 
                             <?php else: ?>
-                                <span class="text-gray-400 text-xs">Cannot delete pending order</span>
+
                             <?php endif; ?>
                         </td>
 

@@ -19,6 +19,18 @@ $totalCount = $availableCount + $unavailableCount;
 
 <h1 class="mb-6 font-bold text-3xl heading-font">🍕 Pizza Menu Management</h1>
 
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="bg-green-100 mb-4 p-4 rounded text-green-800">
+        <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')): ?>
+    <div class="bg-red-100 mb-4 p-4 rounded text-red-800">
+        <?= session()->getFlashdata('error') ?>
+    </div>
+<?php endif; ?>
+
 <p class="mb-4 text-gray-600 dark:text-gray-300">
     Welcome, <?= esc($user['first_name'] ?? 'Manager') ?>! Manage your pizza menu below.
 </p>

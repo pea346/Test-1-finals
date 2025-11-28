@@ -2,6 +2,17 @@
 <?= $this->section('content') ?>
 
 <h1 class="mb-8 font-bold text-red-700 text-3xl heading-font">🍕 Menu</h1>
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="bg-green-100 mb-6 p-4 rounded text-green-800">
+        <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')): ?>
+    <div class="bg-red-100 mb-6 p-4 rounded text-red-800">
+        <?= session()->getFlashdata('error') ?>
+    </div>
+<?php endif; ?>
 
 <?php if (!empty($items)): ?>
     <div class="gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">

@@ -2,6 +2,17 @@
 <?= $this->section('content') ?>
 
 <h1 class="mb-6 font-bold text-3xl heading-font">➕ Add Pizza</h1>
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="bg-green-100 mb-4 p-4 rounded text-green-800">
+        <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')): ?>
+    <div class="bg-red-100 mb-4 p-4 rounded text-red-800">
+        <?= session()->getFlashdata('error') ?>
+    </div>
+<?php endif; ?>
 
 <form action="<?= site_url('/admin/menu/store') ?>" method="POST" enctype="multipart/form-data" class="bg-white dark:bg-gray-800 shadow mx-auto p-6 rounded-xl max-w-3xl">
 

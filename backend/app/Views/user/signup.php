@@ -6,6 +6,17 @@ $old = session('old') ?? [];
 <html lang="en" class="bg-gray-100 dark:bg-gray-900">
 <?= view('components/head', ['title' => 'Signup Page']) ?>
 
+<?php if ($msg = session()->getFlashdata('success')): ?>
+    <div style="position: fixed; top: 20px; right: 20px; background: #16a34a; color: white; padding: 10px 20px; border-radius: 6px; z-index: 1000;">
+        <?= esc($msg) ?>
+    </div>
+<?php endif; ?>
+
+<?php if ($msg = session()->getFlashdata('error')): ?>
+    <div style="position: fixed; top: 20px; right: 20px; background: #dc2626; color: white; padding: 10px 20px; border-radius: 6px; z-index: 1000;">
+        <?= esc($msg) ?>
+    </div>
+<?php endif; ?>
 
 <body class="flex flex-col justify-center items-center bg-gradient-to-br from-yellow-100 dark:from-gray-800 via-red-100 dark:via-gray-900 to-orange-200 dark:to-black min-h-screen">
 

@@ -1,5 +1,16 @@
 <?= $this->extend('components/client_layout') ?>
 <?= $this->section('content') ?>
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="bg-green-100 mb-4 p-4 rounded text-green-800">
+        <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')): ?>
+    <div class="bg-red-100 mb-4 p-4 rounded text-red-800">
+        <?= session()->getFlashdata('error') ?>
+    </div>
+<?php endif; ?>
 
 <h1 class="mb-4 font-bold text-3xl heading-font">Welcome, <?= esc($user['first_name']) ?>!</h1>
 <p class="mb-6 text-gray-700 dark:text-gray-300">
